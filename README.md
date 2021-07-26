@@ -4,12 +4,17 @@
 > A Helm Chart for [QingdaoU/OnlineJudge](https://github.com/QingdaoU/OnlineJudge)
 
 ## Installing the Chart
+
 > Install the Chart with the release name of `my-onlinejudge`
 
 ```bash
 $ helm repo add onlinejudge https://thetkpark.github.io/onlinejudge-helm-chart
 $ helm install my-onlinejudge onlinejudge/onlinejudge
 ```
+
+## Usage
+
+The entrypoint to the web application is avaliable at `<release-name>-backend-srv` on port 8000
 
 ## Uninstalling the Chart
 
@@ -29,4 +34,3 @@ $ helm uninstall my-onlinejudge
 | postgres.db        | Database name that will be used to store data             | onlinejudge     |
 | postgres.username  | Username of the Postgres database user                    | onlinejudge     |
 | postgres.password  | Password of the Postgres database user                    | onlinejudge     |
-
