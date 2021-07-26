@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  onlinejudge:
+  - apiVersion: v2
+    appVersion: 20210326-c7b2b
+    created: "2021-07-26T17:02:01.4244745+07:00"
+    description: A Helm chart for QingdaoU/OnlineJudge
+    digest: 723d44bd1298471f56c4fe182783cc7638b07acdd53f61e36cc76fc6a68b254a
+    name: onlinejudge
+    type: application
+    urls:
+    - https://thetkpark.github.io/onlinejudge-helm-chart/onlinejudge-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-07-26T17:02:01.4233695+07:00"
