@@ -3,5 +3,5 @@ postgres:
   username: onlinejudge
   password: onlinejudge
 judge_server_token: changeThisToken
-disk_size: 5Gi
+disk_size: 2Gi
 storage_class: default
