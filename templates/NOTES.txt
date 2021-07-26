@@ -1,0 +1,7 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }} on {{ .Release.Namespace }} namespace.
+
+The onlinejudge web application can be access through {{ .Release.Name }}-backend-srv on port 8000
+
+If you havn't change the "judge_server_token" value, PLEASE CHANGE IT!
