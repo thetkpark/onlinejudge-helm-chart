@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-judge-server-depl
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-judge-server
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-judge-server
+    spec:
+      volumes:
+        - name: {{ .Release.Name }}-storage
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pvc
+      containers:
+        - name: judge
+          image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/judge_server
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: {{ .Release.Name }}-storage
+              mountPath: /test_case
+              subPath: backend/test_case
+              readOnly: true
+            - name: {{ .Release.Name }}-storage
+              mountPath: /log
+              subPath: judge_server/log
+            - name: {{ .Release.Name }}-storage
+              mountPath: /judger
+              subPath: judge_server/run
+          resources:
+            limits:
+              memory: "350Mi"
+              cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "150m"
+          env:
+            - name: SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-configmap
+                  key: SERVICE_URL
+            - name: BACKEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-configmap
+                  key: BACKEND_URL
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: JUDGE_SERVER_TOKEN
+          livenessProbe:
+            exec:
+              command:
+                - python3
+                - /code/service.py
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          securityContext:
+            capabilities:
+              drop:
+                - SETPCAP
+                - MKNOD
+                - NET_BIND_SERVICE
+                - SYS_CHROOT
+                - SETFCAP
+                - FSETID
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-judge-server-srv
+spec:
+  selector:
+    app: {{ .Release.Name }}-judge-server
+  ports:
+  - port: 8080
+    targetPort: 8080

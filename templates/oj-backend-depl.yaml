@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-backend-depl
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-backend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-backend
+    spec:
+      volumes:
+        - name: {{ .Release.Name }}-storage
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pvc
+      containers:
+        - name: backend
+          image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/oj_backend
+          ports:
+            - containerPort: 8000
+            - containerPort: 1443
+          volumeMounts:
+            - name: {{ .Release.Name }}-storage
+              mountPath: /data
+              subPath: backend
+          resources:
+            limits:
+              memory: "400Mi"
+              cpu: "100m"
+            requests:
+              memory: "256Mi"
+              cpu: "20m"
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-configmap
+                  key: POSTGRES_HOST
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-configmap
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: POSTGRES_PASSWORD
+            - name: JUDGE_SERVER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: JUDGE_SERVER_TOKEN
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-configmap
+                  key: REDIS_HOST
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-backend-srv
+spec:
+  selector:
+    app: {{ .Release.Name }}-backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: web
+  - port: 1443
+    targetPort: 1443
+    name: judge-server
+  
+

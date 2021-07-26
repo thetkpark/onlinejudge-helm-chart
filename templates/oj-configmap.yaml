@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  namespace: {{ .Release.Namespace }}
+data:
+  POSTGRES_HOST: {{ .Release.Name }}-postgres-srv
+  POSTGRES_DB: {{ .Values.postgres.db }}
+  SERVICE_URL: "http://{{ .Release.Name }}-judge-server-srv:8080"
+  BACKEND_URL: "http://{{ .Release.Name }}-backend-srv:8000/api/judge_server_heartbeat/"
+  REDIS_HOST: {{ .Release.Name }}-redis-srv
