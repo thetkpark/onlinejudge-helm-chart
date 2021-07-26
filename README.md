@@ -1,5 +1,5 @@
 # Onlinejudge Helm Chart
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/onlinejudge)](https://artifacthub.io/packages/search?repo=onlinejudge)![](https://img.shields.io/github/v/tag/thetkpark/onlinejudge-helm-chart)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/onlinejudge)](https://artifacthub.io/packages/search?repo=onlinejudge) ![](https://img.shields.io/github/v/tag/thetkpark/onlinejudge-helm-chart)
 
 > A Helm Chart for [QingdaoU/OnlineJudge](https://github.com/QingdaoU/OnlineJudge)
 
